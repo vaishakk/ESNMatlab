@@ -12,37 +12,32 @@ numSpeakers = 10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%Load and prepare Data%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% data = load('ex2data2.txt');%Read data from file
-% N = size(data,1);
-% data = data(randperm(N),:);
-% save Data.mat 'data' 'N';
-% load Data.mat
-load Data/TrainData.mat
-N = size(trainX,2);
-N = round(0.7*N);
-% X = data(1:N, [1, 2]); y = data(1:N, 3);%Segragate input and output
-X = trainX.'; y = label2mat(trainlabel);
+data = load('ex2data2.txt');%Read data from file
+N = size(data,1);
+data = data(randperm(N),:);
+X = data(1:N, [1, 2]); y = data(1:N, 3);%Segragate input and output
 X = normalize(X);%Normalize input
 inputLength = size(X,2);%Number of features
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%Calculate network weights%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [Win,Wrec] = createWeights(netDim,inputLength,connectivity);
-save W.mat 'Win' 'Wrec'
-% load W.mat
+% save W.mat 'Win' 'Wrec'
 Win = etain*Win;
 Wrec = specRad*Wrec;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%Training the network%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-R = runRCNet(X,Win,Wrec,lamda);%Run the network
+Rt = zeros(netDim,1);%Initialize state to all zeros
+R = runRCNet(X,Rt,Win,Wrec,lamda,1);%Run the network
 Wout = calcOutputWeights(R,y,epsilon);% Calculate output weights
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%Testing the network%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % X = data(N+1:end,[1 2]); y = data(N+1:end,3);
 % X = normalize(X);
-R = runRCNet(X,Win,Wrec,lamda);
+Rt = zeros(netDim,1);%Initialize state to all zeros
+R = runRCNet(X,Rt,Win,Wrec,lamda,1);
 yo = R*Wout;
 yo(yo>0.5) = 1;
 yo(yo<0.5) = 0;

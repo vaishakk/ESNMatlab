@@ -18,15 +18,6 @@ for j=1:Nfrm
     R = [R, Rt];
     if display
         textprogressbar(round(j*100/Nfrm));
-%     imshow([zeros(10,5*round(j*100/Nfrm)) ones(10,5*(100-round(j*100/Nfrm)))]);
-%      title(['Network progress... ' num2str(round(j*100/Nfrm)) '%'])
-%      iptsetpref('ImshowBorder', 'loose');
-%      hFig = gcf;
-%       % hide the toolbar
-%      set(hFig,'menubar','none')
-%      % to hide the title
-%      set(hFig,'NumberTitle','off');
-%      drawnow;
     end
 end
 if display
